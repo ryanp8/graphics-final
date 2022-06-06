@@ -3,8 +3,12 @@
 ### Class Period: 4
 ---
 ## New Graphics Engine Features
-- Anti-aliasing
+- Basic anti-aliasing
+- Phong shading
 
 ---
-## The Details
-Use Xiaolin Wu's line drawing algorithm. Add new MDL command, "AA," with arguments "on" and "off." If "on," Xiaolin Wu's algorithm will be used. If the command is not present, or set to "off," then Bresenham's algorithm will be used.
+## The Details]
+- Anti-aliasing
+    - Implement Xiaolin Wu's line drawing algorithm. Create additional MDL "aaline" command to draw an anti-aliased line. Bresenham's algorithm will still be used for scanline conversion and zbuffer. Xiaolin Wu's algorithm will be used just to draw lines, not filling polygons.
+- Phong shading
+    - Implement shading MDL command to toggle between "phong" and "flat" shading models
