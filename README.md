@@ -1,5 +1,5 @@
 # Graphics Final Project
-### Name: Ryan Poon
+### Names: Ryan Poon and Rickey Dong
 ### Class Period: 4
 ---
 ## New Graphics Engine Features
