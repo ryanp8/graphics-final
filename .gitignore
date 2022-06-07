@@ -1,6 +1,7 @@
 parsetab.py
 face
 ply/__pycache__
+parser.out
 
 # images
 *.ppm
