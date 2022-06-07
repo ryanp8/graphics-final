@@ -7,7 +7,7 @@
 - Phong shading
 
 ---
-## The Details]
+## The Details
 - Anti-aliasing
     - Implement Xiaolin Wu's line drawing algorithm. Create additional MDL "aaline" command to draw an anti-aliased line. Bresenham's algorithm will still be used for scanline conversion and zbuffer. Xiaolin Wu's algorithm will be used just to draw lines, not filling polygons.
 - Phong shading
