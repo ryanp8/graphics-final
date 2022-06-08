@@ -177,6 +177,8 @@ def run(filename):
                 matrix_mult( stack[-1], tmp )
                 draw_lines(tmp, screen, zbuffer, color)
                 tmp = []
+            elif c == 'aaline':
+                
             elif c == 'move':
                 if command['knob'] is not None:
                     knob_value = symbols[command['knob']][-1]
