@@ -314,6 +314,16 @@ def draw_lines( matrix, screen, zbuffer, color ):
                    screen, zbuffer, color)
         point+= 2
 
+def draw_aa_lines(matrix, screen, zbuffer, color):
+    if len(matrix) < 2:
+        print('Need at least 2 points to draw')
+        return
+    
+    point = 0
+    while point < len(matrix) - 1:
+        draw_aa_line(0)
+        point += 2
+
 def add_edge( matrix, x0, y0, z0, x1, y1, z1 ):
     add_point(matrix, x0, y0, z0)
     add_point(matrix, x1, y1, z1)
