@@ -349,6 +349,12 @@ def draw_aa_line(x0, y0, z0, x1, y1, z1, screen, zbuffer, color):
         temp = y0
         y0 = y1
         y1 = temp
+    dx = x1 - x0
+    dy = y1 - y0
+    if dx == 0:
+        gradient = 1
+    else:
+        gradient = dy / dx
 
 def draw_line( x0, y0, z0, x1, y1, z1, screen, zbuffer, color ):
 
