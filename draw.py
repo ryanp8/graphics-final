@@ -331,7 +331,24 @@ def add_edge( matrix, x0, y0, z0, x1, y1, z1 ):
 def add_point( matrix, x, y, z=0 ):
     matrix.append( [x, y, z, 1] )
 
+def draw_aa_line(x0, y0, z0, x1, y1, z1, screen, zbuffer, color):
+    is_steep = abs(y1 - y0) > abs(x1 - x0)
+    if is_steep:
+        temp = x0
+        x0 = y0
+        y0 = temp
 
+        temp = x1
+        x1 = y1
+        y1 = temp
+    if x0 > x1:
+        temp = x0
+        x0 = x1
+        x1 = temp
+
+        temp = y0
+        y0 = y1
+        y1 = temp
 
 def draw_line( x0, y0, z0, x1, y1, z1, screen, zbuffer, color ):
 
