@@ -404,6 +404,33 @@ def draw_aa_line(x0, y0, z0, x1, y1, z1, screen, zbuffer, color):
     xgap = rfpart(x0 + 0.5)
     xpixel1 = xend
     ypixel1 = ipart(yend)
+    if is_steep:
+        brightness = rfpart(yend) * xgap
+        modified_color = color[:]
+        modified_color[0] = modified_color[0] * brightness
+        modified_color[1] = modified_color[1] * brightness
+        modified_color[2] = modified_color[2] * brightness
+        # plot( screen, zbuffer, color, x, y, z )
+        plot(screen, zbuffer, modified_color, ypixel1, xpixel1, 0)
+        brightness = fpart(yend) * xgap
+        modified_color = color[:]
+        modified_color[0] = modified_color[0] * brightness
+        modified_color[1] = modified_color[1] * brightness
+        modified_color[2] = modified_color[2] * brightness
+        plot(screen, zbuffer, modified_color, ypixel1+1, xpixel1, 0)
+    else:
+        brightness = rfpart(yend) * xgap
+        modified_color = color[:]
+        modified_color[0] = modified_color[0] * brightness
+        modified_color[1] = modified_color[1] * brightness
+        modified_color[2] = modified_color[2] * brightness
+        plot(screen, zbuffer, modified_color, xpixel1, ypixel1, 0)
+        brightness = fpart(yend) * xgap
+        modified_color = color[:]
+        modified_color[0] = modified_color[0] * brightness
+        modified_color[1] = modified_color[1] * brightness
+        modified_color[2] = modified_color[2] * brightness
+        plot(screen, zbuffer, modified_color, xpixel1, ypixel1+1, 0)
 
 def draw_line( x0, y0, z0, x1, y1, z1, screen, zbuffer, color ):
 
