@@ -431,6 +431,7 @@ def draw_aa_line(x0, y0, z0, x1, y1, z1, screen, zbuffer, color):
         modified_color[1] = modified_color[1] * brightness
         modified_color[2] = modified_color[2] * brightness
         plot(screen, zbuffer, modified_color, xpixel1, ypixel1+1, 0)
+    intersection_y = yend + gradient # first y-intersection
 
 def draw_line( x0, y0, z0, x1, y1, z1, screen, zbuffer, color ):
 
