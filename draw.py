@@ -2,6 +2,7 @@ from display import *
 from matrix import *
 from gmath import *
 from phong_shading import *
+import math
 
 def draw_scanline(x0, z0, x1, z1, y, screen, zbuffer, color):
     if x0 > x1:
@@ -359,6 +360,20 @@ def add_edge( matrix, x0, y0, z0, x1, y1, z1 ):
 def add_point( matrix, x, y, z=0 ):
     matrix.append( [x, y, z, 1] )
 
+def ipart(x):
+    # integer part of x
+    return math.floor(x)
+
+def round_normal(x):
+    return ipart(x + 0.5)
+
+def fpart(x):
+    # fractional part of x
+    return x - math.floor(x)
+
+def rfpart(x):
+    return 1 - fpart(x)
+
 def draw_aa_line(x0, y0, z0, x1, y1, z1, screen, zbuffer, color):
     is_steep = abs(y1 - y0) > abs(x1 - x0)
     if is_steep:
@@ -383,6 +398,12 @@ def draw_aa_line(x0, y0, z0, x1, y1, z1, screen, zbuffer, color):
         gradient = 1
     else:
         gradient = dy / dx
+
+    x_endpoint = round_normal(x0)
+    y_endpoint = y0 + gradient * (xend - x0)
+    xgap = rfpart(x0 + 0.5)
+    xpixel1 = xend
+    ypixel1 = ipart(yend)
 
 def draw_line( x0, y0, z0, x1, y1, z1, screen, zbuffer, color ):
 
