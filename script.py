@@ -1,3 +1,4 @@
+from calendar import c
 import mdl
 from display import *
 from matrix import *
@@ -19,28 +20,25 @@ from draw import *
   with the name being used.
   ==================== """
 def first_pass( commands ):
-    frames_found = False
-    basename_found = False
-    vary_found = False
+
+    name = ''
+    num_frames = 1
+    vary_present = False;
 
     for command in commands:
         if command['op'] == 'frames':
-            frames_found = True
-            num_frames = command['args'][0]
-        elif command['op'] == 'basename':
-            basename_found = True
+            num_frames = int(command['args'][0])
+        if command['op'] == 'basename':
             name = command['args'][0]
-        elif command['op'] == 'vary':
-            vary_found = True
+        if command['op'] == 'vary':
+            vary_present = True
+
+    if vary_present and num_frames == 1:
+        print('Error: Vary present, but no frames')
     
-    if vary_found and not frames_found:
-        exit()
-    
-    if frames_found and not basename_found:
-        name = 'default_animation_name'
-        print("No name found. Using default name 'default_animation_name'")
-    
-    num_frames = int(num_frames)
+    if num_frames > 1 and name == '':
+        name = 'default_name'
+
 
     return (name, num_frames)
 
@@ -61,30 +59,19 @@ def first_pass( commands ):
   dictionary corresponding to the given knob with the
   appropirate value.
   ===================="""
-# {'op': 'frames', 'args': [50.0]}
-# {'op': 'basename', 'args': ['simple_50']}
-# {'op': 'push', 'args': None}
-# {'op': 'move', 'args': [250.0, 250.0, 0.0], 'knob': None}
-# {'op': 'scale', 'args': [2.0, 2.0, 2.0], 'knob': 'bigenator'}
-# {'op': 'rotate', 'args': ['y', 360.0], 'knob': 'spinny'}
-# {'op': 'rotate', 'args': ['z', 360.0], 'knob': 'spinny'}
-# {'op': 'torus', 'constants': None, 'cs': None, 'args': [0.0, 0.0, 0.0, 75.0, 125.0]}
-# {'op': 'vary', 'args': [0.0, 49.0, 0.0, 1.0], 'knob': 'spinny'}
-# {'op': 'vary', 'args': [0.0, 24.0, 0.0, 1.0], 'knob': 'bigenator'}
-# {'op': 'vary', 'args': [25.0, 49.0, 1.0, 0.0], 'knob': 'bigenator'}
-
 def second_pass( commands, num_frames ):
+    # print("KSDJFLDSKJF", num_frames)
     frames = [ {} for i in range(num_frames) ]
-    for command in commands:
-        if command['op'] == 'vary':
-            start_index = int(command['args'][0])
-            end_index = int(command['args'][1])
-            step_size = (command['args'][3] - command['args'][2]) / (command['args'][1] - command['args'][0])
-            frames[start_index][command['knob']] = command['args'][2]
-            while start_index <= end_index:
-                start_index += 1
-                if start_index <= end_index:
-                    frames[start_index][command['knob']] = frames[start_index-1][command['knob']] + step_size
+
+    for i, frame in enumerate(frames):
+        for command in commands:
+            if command['op'] == 'vary':
+                knob = command['knob']
+                args = command['args']
+                if i >= args[0] and i <= args[1]:
+                    d_knob = (args[3] - args[2]) / (args[1] - args[0] + 1)
+                    frame[knob] = args[2] + (i - args[0]) * d_knob
+
     return frames
 
 
@@ -106,8 +93,8 @@ def run(filename):
     ambient = [50,
                50,
                50]
-    light = [[0.5,
-              0.75,
+    light = [[0,
+              0,
               1],
              [255,
               255,
@@ -122,9 +109,13 @@ def run(filename):
 
     (name, num_frames) = first_pass(commands)
     frames = second_pass(commands, num_frames)
-    current_frame = 0
-    while current_frame < num_frames:
-        # print("Creating frame " + str(current_frame))
+
+
+    for current_frame, frame in enumerate(frames):
+
+        for item in frame.items():
+            symbols[item[0]] = item[1]
+
         tmp = new_matrix()
         ident( tmp )
 
@@ -136,13 +127,15 @@ def run(filename):
         consts = ''
         coords = []
         coords1 = []
-        if num_frames > 1:
-            for knob_key in frames[current_frame]:
-                symbols[knob_key].append(frames[current_frame][knob_key])
+
         for command in commands:
             c = command['op']
             args = command['args']
             knob_value = 1
+            if 'knob' in command.keys() and command['knob']:
+                knob_value = symbols[command['knob']]
+            
+
             if c == 'box':
                 if command['constants']:
                     reflect = command['constants']
@@ -177,25 +170,19 @@ def run(filename):
                 matrix_mult( stack[-1], tmp )
                 draw_lines(tmp, screen, zbuffer, color)
                 tmp = []
-            elif c == 'aaline':
-                
+
             elif c == 'move':
-                if command['knob'] is not None:
-                    knob_value = symbols[command['knob']][-1]
-                tmp = make_translate(args[0]*knob_value, args[1]*knob_value, args[2]*knob_value)
+                tmp = make_translate(args[0] * knob_value, args[1] * knob_value, args[2] * knob_value)
                 matrix_mult(stack[-1], tmp)
                 stack[-1] = [x[:] for x in tmp]
                 tmp = []
             elif c == 'scale':
-                if command['knob'] is not None:
-                    knob_value = symbols[command['knob']][-1]
-                tmp = make_scale(args[0]*knob_value, args[1]*knob_value, args[2]*knob_value)
+
+                tmp = make_scale(args[0] * knob_value, args[1] * knob_value, args[2] * knob_value)
                 matrix_mult(stack[-1], tmp)
                 stack[-1] = [x[:] for x in tmp]
                 tmp = []
             elif c == 'rotate':
-                if command['knob'] is not None:
-                    knob_value = symbols[command['knob']][-1]
                 theta = args[1] * (math.pi/180) * knob_value
                 if args[0] == 'x':
                     tmp = make_rotX(theta)
@@ -210,11 +197,14 @@ def run(filename):
                 stack.append([x[:] for x in stack[-1]] )
             elif c == 'pop':
                 stack.pop()
-            elif c == 'display':
+            elif c == 'display' and num_frames < 2:
                 display(screen)
             elif c == 'save':
                 save_extension(screen, args[0])
             # end operation loop
-        save_extension(screen, "anim/"+name+f"%03d"%current_frame)
-        current_frame += 1
-    make_animation(name)
+        if num_frames > 1:
+            print('saving ' + name + f"_%03d.png"%current_frame)
+            save_extension(screen, './anim/' + name + f"_%03d.png"%current_frame)
+    
+    if num_frames > 1:
+        make_animation(name)

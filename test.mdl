@@ -1,0 +1,7 @@
+basename spin_cube
+frames 20
+push
+rotate y 360 spin
+box 200 300 0 100 100 100
+
+vary spin 0 19 0 1
