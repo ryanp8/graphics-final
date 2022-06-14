@@ -79,12 +79,14 @@ def add_polygon( polygons, x0, y0, z0, x1, y1, z1, x2, y2, z2 ):
     add_point(polygons, x1, y1, z1)
     add_point(polygons, x2, y2, z2)
 
-def draw_polygons( polygons, screen, zbuffer, view, ambient, light, symbols, reflect):
+def draw_polygons( polygons, screen, zbuffer, view, ambient, light, symbols, reflect, shading):
     if len(polygons) < 2:
         print('Need at least 3 points to draw')
         return
 
-    vertices = calculate_vertex_normals(polygons)
+
+    if shading == 'phong':
+        vertices = calculate_vertex_normals(polygons)
     # print(vertices)
     # for vertex, normal in vertices.items():
     #     color = get_lighting(normal, view, ambient, light, symbols, reflect )
@@ -113,11 +115,15 @@ def draw_polygons( polygons, screen, zbuffer, view, ambient, light, symbols, ref
         #print normal
         if normal[2] > 0:
 
-            # color = get_lighting(normal, view, ambient, light, symbols, reflect )
-            # print(normal, color)
-            # scanline_convert(polygons, point, screen, zbuffer, color)
+            if shading == 'phong':
+                interpolate_normals(polygons, point, vertices, screen, zbuffer, view, ambient, light, symbols, reflect)
+            
+            elif shading == 'flat':
 
-            interpolate_normals(polygons, point, vertices, screen, zbuffer, view, ambient, light, symbols, reflect)
+                color = get_lighting(normal, view, ambient, light, symbols, reflect )
+            # print(normal, color)
+                scanline_convert(polygons, point, screen, zbuffer, color)
+
 
             # draw_line( int(polygons[point][0]),
             #            int(polygons[point][1]),

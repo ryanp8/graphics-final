@@ -1,14 +1,29 @@
-basename rotate_cube_200
-frames 200
-constants brass 0.329412 0.780392 0.992157 0.223529 0.568627 0.941176 0.027451 0.113725 0.807843
-push
-move 250 250 0
-rotate y 360 spin
-box 0 0 0 100 100 100
-
-vary spin 0 199 0 1
-
-// push 
-// move 200 300 0
+// basename rotate_cube_200
+// frames 200
+// constants brass 0.329412 0.780392 0.992157 0.223529 0.568627 0.941176 0.027451 0.113725 0.807843
+// push
+// move 250 250 0
+// rotate y 360 spin
 // box 0 0 0 100 100 100
-// display
+
+// vary spin 0 199 0 1
+
+shading phong
+push 
+move 200 300 0
+box 0 0 0 100 100 100
+display
+
+// basename teapot_spin
+// frames 100
+// push
+// move 250 250 0
+// scale 60 60 60
+// rotate x 360 spin1
+// rotate y 360 spin2
+// rotate z 360 spin3
+// box 0 0 0 2 2 2
+
+// vary spin1 0 99 0 1
+// vary spin2 0 99 0 1
+// vary spin3 0 99 0 1

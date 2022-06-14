@@ -219,7 +219,7 @@ if __name__ == '__main__':
     polygons = []
     screen = []
     zbuffer = []
-    add_box(polygons, 250, 250, 0, 100, 100, 100)
+    # add_box(polygons, 250, 250, 0, 100, 100, 100)
     # t = generate_torus(0, 0, 0, 30, 100, 20)
     # add_torus(polygons, 0, 0, 0, 30, 100, 20)
     vertices = calculate_vertex_normals(polygons)
