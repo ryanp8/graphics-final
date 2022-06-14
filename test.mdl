@@ -1,7 +1,14 @@
-basename spin_cube
-frames 20
+basename rotate_cube_200
+frames 200
+constants brass 0.329412 0.780392 0.992157 0.223529 0.568627 0.941176 0.027451 0.113725 0.807843
 push
+move 250 250 0
 rotate y 360 spin
-box 200 300 0 100 100 100
+box 0 0 0 100 100 100
 
-vary spin 0 19 0 1
+vary spin 0 199 0 1
+
+// push 
+// move 200 300 0
+// box 0 0 0 100 100 100
+// display

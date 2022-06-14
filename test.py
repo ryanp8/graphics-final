@@ -1,2 +1,7 @@
-for i in range(0, 10):
-    print(i)
+def test(arr):
+    arr.append(10)
+
+arr = [1,2,3]
+print(arr)
+test(arr)
+print(arr)

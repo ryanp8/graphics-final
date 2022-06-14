@@ -3,41 +3,66 @@ from gmath import *
 from display import *
 from draw import *
 
+def is_close(arr1, arr2):
+    close = abs(arr1[0] - arr2[0]) <= 0.0001 and abs(arr1[1] - arr2[1]) <= 0.0001 and abs(arr1[2] - arr2[2]) <= 0.0001
+    return close
+
+def add_norm(normals, pt):
+    close = False
+    for n in normals:
+        if is_close(n, pt):
+            close = True
+            break
+    
+    if not close:
+        normals.append(pt)
+
 
 def calculate_vertex_normals(polygons):
     # vertices = { tuple(v): [0, 0, 0] for v in set([ tuple(p[:3]) for p in polygons])}
-    vertices = { tuple(v): set() for v in set([ tuple(p[:3]) for p in polygons])}
+    # v2 = { tuple(v): [] for v in set([ tuple(p[:3]) for p in polygons])}
 
-    
+    vertices = { tuple(v): [] for v in set([ tuple(p[:3]) for p in polygons])}
+
     i = 0
     while i < len(polygons):
 
         A = [polygons[i+1][j] - polygons[i][j] for j in range(3)]
         B = [polygons[i+2][j] - polygons[i][j] for j in range(3)]
         v1_n = cross_product(A, B)
+        add_norm(vertices[tuple(polygons[i][:3])], v1_n)
         # vertices[tuple(polygons[i][:3])] = [vertices[tuple(polygons[i][:3])][k] + v1_n[k] for k in range(3)]
-        vertices[tuple(polygons[i][:3])].add(tuple(v1_n))
+        # vertices[tuple(polygons[i][:3])].add(tuple(v1_n))
+        # v2[tuple(polygons[i][:3])].append(v1_n)
 
 
         A = [polygons[i+2][j] - polygons[i+1][j] for j in range(3)]
         B = [polygons[i][j] - polygons[i+1][j] for j in range(3)]
         v2_n = cross_product(A, B)
+        add_norm(vertices[tuple(polygons[i+1][:3])], v2_n)
         # vertices[tuple(polygons[i+1][:3])] = [vertices[tuple(polygons[i+1][:3])][k] + v2_n[k] for k in range(3)]
-        vertices[tuple(polygons[i+1][:3])].add(tuple(v2_n))
+        # vertices[tuple(polygons[i+1][:3])].add(tuple(v2_n))
+        # v2[tuple(polygons[i+1][:3])].append(v2_n)
 
 
         A = [polygons[i][j] - polygons[i+2][j] for j in range(3)]
         B = [polygons[i+1][j] - polygons[i+2][j] for j in range(3)]
         v3_n = cross_product(A, B)
+        add_norm(vertices[tuple(polygons[i+2][:3])], v3_n)
         # vertices[tuple(polygons[i+2][:3])] = [vertices[tuple(polygons[i+2][:3])][k] + v3_n[k] for k in range(3)]
-        vertices[tuple(polygons[i+2][:3])].add(tuple(v3_n))
+        # vertices[tuple(polygons[i+2][:3])].add(tuple(v3_n))
+        # v2[tuple(polygons[i+2][:3])].append(v3_n)
+
 
         i += 3
+
+    # for k, v in vertices.items():
+    #     print(k, v)
 
     # for k in vertices.keys():
     #     normalize(vertices[k])
 
-
+    # print('============')
     for k, v in vertices.items():
         v = list(v)
         x_total = 0
@@ -51,6 +76,12 @@ def calculate_vertex_normals(polygons):
         normalize(a)
         vertices[k] = a
     
+    # for k, v in vertices.items():
+    #     print(k, v)
+
+    # print('==')
+    # for k, v in v2.items():
+    #     print(k)
     
     return vertices
 
