@@ -465,6 +465,21 @@ def draw_aa_line(x0, y0, z0, x1, y1, z1, screen, zbuffer, color):
             modified_color[2] = modified_color[2] * brightness
             plot(screen, zbuffer, modified_color, ipart(intersection_y)+1, x, 0)
             intersection_y += gradient
+    else:
+        for x in range(xpixel1+1, xpixel2-1):
+            brightness = rfpart(intersection_y)
+            modified_color = color[:]
+            modified_color[0] = modified_color[0] * brightness
+            modified_color[1] = modified_color[1] * brightness
+            modified_color[2] = modified_color[2] * brightness
+            plot(screen, zbuffer, modified_color, x, ipart(intersection_y), 0)
+            brightness = fpart(intersection_y)
+            modified_color = color[:]
+            modified_color[0] = modified_color[0] * brightness
+            modified_color[1] = modified_color[1] * brightness
+            modified_color[2] = modified_color[2] * brightness
+            plot(screen, zbuffer, modified_color, x, ipart(intersection_y)+1, 0)
+            intersection_y += gradient
 
 def draw_line( x0, y0, z0, x1, y1, z1, screen, zbuffer, color ):
 
