@@ -130,7 +130,6 @@ def run(filename):
         coords1 = []
 
         for command in commands:
-            print(command)
             c = command['op']
             args = command['args']
             knob_value = 1
@@ -181,6 +180,7 @@ def run(filename):
             elif c == 'aa_line':
                 add_edge(tmp,
                         args[0], args[1], args[2], args[3], args[4], args[5])
+                print(tmp)
                 matrix_mult( stack[-1], tmp )
                 draw_aa_lines(tmp, screen, zbuffer, color)
                 tmp = []
