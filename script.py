@@ -93,8 +93,8 @@ def run(filename):
     ambient = [50,
                50,
                50]
-    light = [[0,
-              0,
+    light = [[0.5,
+              0.75,
               1],
              [255,
               255,
@@ -124,11 +124,13 @@ def run(filename):
         zbuffer = new_zbuffer()
         tmp = []
         step_3d = 100
+        shading = 'flat'
         consts = ''
         coords = []
         coords1 = []
 
         for command in commands:
+            print(command)
             c = command['op']
             args = command['args']
             knob_value = 1
@@ -137,14 +139,19 @@ def run(filename):
             
 
             if c == 'box':
+                
                 if command['constants']:
                     reflect = command['constants']
                 add_box(tmp,
                         args[0], args[1], args[2],
                         args[3], args[4], args[5])
                 matrix_mult( stack[-1], tmp )
-                draw_polygons(tmp, screen, zbuffer, view, ambient, light, symbols, reflect)
+                draw_polygons(tmp, screen, zbuffer, view, ambient, light, symbols, reflect, shading)
                 tmp = []
+                # read_obj('teapot.obj', tmp)
+                # matrix_mult( stack[-1], tmp )
+                # draw_polygons(tmp, screen, zbuffer, view, ambient, light, symbols, reflect)
+                # tmp = []
                 reflect = '.white'
             elif c == 'sphere':
                 if command['constants']:
@@ -152,7 +159,7 @@ def run(filename):
                 add_sphere(tmp,
                         args[0], args[1], args[2], args[3], step_3d)
                 matrix_mult( stack[-1], tmp )
-                draw_polygons(tmp, screen, zbuffer, view, ambient, light, symbols, reflect)
+                draw_polygons(tmp, screen, zbuffer, view, ambient, light, symbols, reflect, shading)
                 tmp = []
                 reflect = '.white'
             elif c == 'torus':
@@ -161,7 +168,7 @@ def run(filename):
                 add_torus(tmp,
                         args[0], args[1], args[2], args[3], args[4], step_3d)
                 matrix_mult( stack[-1], tmp )
-                draw_polygons(tmp, screen, zbuffer, view, ambient, light, symbols, reflect)
+                draw_polygons(tmp, screen, zbuffer, view, ambient, light, symbols, reflect, shading)
                 tmp = []
                 reflect = '.white'
             elif c == 'line':
@@ -197,6 +204,8 @@ def run(filename):
                 stack.append([x[:] for x in stack[-1]] )
             elif c == 'pop':
                 stack.pop()
+            elif c == 'shading':
+                shading = command['shade_type']
             elif c == 'display' and num_frames < 2:
                 display(screen)
             elif c == 'save':
