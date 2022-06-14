@@ -15,7 +15,8 @@ tokens = (
     "TORUS",
     "SPHERE",
     "BOX", 
-    "LINE", 
+    "LINE",
+    "AA_LINE",
     "MESH", 
     "TEXTURE", 
     "SET", 
@@ -55,6 +56,7 @@ reserved = {
     "sphere" : "SPHERE",
     "box" : "BOX",
     "line" : "LINE",
+    "aa_line" : "AA_LINE",
     "mesh" : "MESH",
     "texture" : "TEXTURE",
     "set" : "SET",
@@ -222,6 +224,34 @@ def p_command_line(p):
                | LINE SYMBOL NUMBER NUMBER NUMBER NUMBER NUMBER NUMBER SYMBOL
                | LINE SYMBOL NUMBER NUMBER NUMBER SYMBOL NUMBER NUMBER NUMBER
                | LINE SYMBOL NUMBER NUMBER NUMBER SYMBOL NUMBER NUMBER NUMBER SYMBOL"""
+    cmd = {'op' : p[1], 'constants' : None, 'cs0' : None, 'cs1' : None, 'args':[]}
+    arg_start = 2
+    if isinstance(p[2], str):
+        cmd['constants'] = p[2]
+        arg_start = 3
+    cmd['args'] = p[arg_start:arg_start+3]
+    arg_start = arg_start+3
+    if isinstance(p[arg_start], str):
+        cmd['cs0'] = p[arg_start]
+        arg_start+= 1
+    cmd['args']+= p[arg_start:arg_start+3]
+    if len(p) == 9 and isinstance(p[8], str):
+        cmd['cs1'] = p[8]
+    if len(p) == 10 and isinstance(p[9], str):
+        cmd['cs1'] = p[9]
+    if len(p) == 11 and isinstance(p[10], str):
+        cmd['cs1'] = p[10]
+    commands.append(cmd)
+
+def p_command_aa_line(p):
+    """command : AA_LINE NUMBER NUMBER NUMBER NUMBER NUMBER NUMBER
+               | AA_LINE NUMBER NUMBER NUMBER NUMBER NUMBER NUMBER SYMBOL
+               | AA_LINE NUMBER NUMBER NUMBER SYMBOL NUMBER NUMBER NUMBER
+               | AA_LINE NUMBER NUMBER NUMBER SYMBOL NUMBER NUMBER NUMBER SYMBOL
+               | AA_LINE SYMBOL NUMBER NUMBER NUMBER NUMBER NUMBER NUMBER
+               | AA_LINE SYMBOL NUMBER NUMBER NUMBER NUMBER NUMBER NUMBER SYMBOL
+               | AA_LINE SYMBOL NUMBER NUMBER NUMBER SYMBOL NUMBER NUMBER NUMBER
+               | AA_LINE SYMBOL NUMBER NUMBER NUMBER SYMBOL NUMBER NUMBER NUMBER SYMBOL"""
     cmd = {'op' : p[1], 'constants' : None, 'cs0' : None, 'cs1' : None, 'args':[]}
     arg_start = 2
     if isinstance(p[2], str):

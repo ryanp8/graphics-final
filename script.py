@@ -100,7 +100,7 @@ def run(filename):
               255,
               255]]
 
-    color = [0, 0, 0]
+    color = [255, 255, 255]
     symbols['.white'] = ['constants',
                          {'red': [0.2, 0.5, 0.5],
                           'green': [0.2, 0.5, 0.5],
@@ -176,6 +176,13 @@ def run(filename):
                         args[0], args[1], args[2], args[3], args[4], args[5])
                 matrix_mult( stack[-1], tmp )
                 draw_lines(tmp, screen, zbuffer, color)
+                tmp = []
+            
+            elif c == 'aa_line':
+                add_edge(tmp,
+                        args[0], args[1], args[2], args[3], args[4], args[5])
+                matrix_mult( stack[-1], tmp )
+                draw_aa_lines(tmp, screen, zbuffer, color)
                 tmp = []
 
             elif c == 'move':
