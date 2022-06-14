@@ -87,32 +87,12 @@ def draw_polygons( polygons, screen, zbuffer, view, ambient, light, symbols, ref
 
     if shading == 'phong':
         vertices = calculate_vertex_normals(polygons)
-    # print(vertices)
-    # for vertex, normal in vertices.items():
-    #     color = get_lighting(normal, view, ambient, light, symbols, reflect )
-    #     plot(screen, zbuffer, color, int(vertex[0]), int(vertex[1]), int(vertex[2]))
-
-    # print(vertices[(250, 250, 0)])
-    # print(get_lighting(vertices[(250, 150, 0)], view, ambient, light, symbols, reflect))
-
-    # print(vertices[(350, 250, 0)])
-    # print(get_lighting(vertices[(350, 150, 0)], view, ambient, light, symbols, reflect))
-
-    # print(vertices[(250, 150, 0)])
-    # print(get_lighting(vertices[(350, 150, 0)], view, ambient, light, symbols, reflect))
-
-    # print(vertices[(350, 150, 0)])
-    # print(get_lighting(vertices[(350, 150, 0)], view, ambient, light, symbols, reflect))
-    # for k, v in vertices.items():
-    #     print(k, v)
 
     point = 0
     while point < len(polygons) - 2:
 
-
         normal = calculate_normal(polygons, point)[:]
 
-        #print normal
         if normal[2] > 0:
 
             if shading == 'phong':
@@ -121,7 +101,6 @@ def draw_polygons( polygons, screen, zbuffer, view, ambient, light, symbols, ref
             elif shading == 'flat':
 
                 color = get_lighting(normal, view, ambient, light, symbols, reflect )
-            # print(normal, color)
                 scanline_convert(polygons, point, screen, zbuffer, color)
 
 

@@ -19,8 +19,6 @@ def add_norm(normals, pt):
 
 
 def calculate_vertex_normals(polygons):
-    # vertices = { tuple(v): [0, 0, 0] for v in set([ tuple(p[:3]) for p in polygons])}
-    # v2 = { tuple(v): [] for v in set([ tuple(p[:3]) for p in polygons])}
 
     vertices = { tuple(v): [] for v in set([ tuple(p[:3]) for p in polygons])}
 
@@ -31,38 +29,21 @@ def calculate_vertex_normals(polygons):
         B = [polygons[i+2][j] - polygons[i][j] for j in range(3)]
         v1_n = cross_product(A, B)
         add_norm(vertices[tuple(polygons[i][:3])], v1_n)
-        # vertices[tuple(polygons[i][:3])] = [vertices[tuple(polygons[i][:3])][k] + v1_n[k] for k in range(3)]
-        # vertices[tuple(polygons[i][:3])].add(tuple(v1_n))
-        # v2[tuple(polygons[i][:3])].append(v1_n)
 
 
         A = [polygons[i+2][j] - polygons[i+1][j] for j in range(3)]
         B = [polygons[i][j] - polygons[i+1][j] for j in range(3)]
         v2_n = cross_product(A, B)
         add_norm(vertices[tuple(polygons[i+1][:3])], v2_n)
-        # vertices[tuple(polygons[i+1][:3])] = [vertices[tuple(polygons[i+1][:3])][k] + v2_n[k] for k in range(3)]
-        # vertices[tuple(polygons[i+1][:3])].add(tuple(v2_n))
-        # v2[tuple(polygons[i+1][:3])].append(v2_n)
 
 
         A = [polygons[i][j] - polygons[i+2][j] for j in range(3)]
         B = [polygons[i+1][j] - polygons[i+2][j] for j in range(3)]
         v3_n = cross_product(A, B)
         add_norm(vertices[tuple(polygons[i+2][:3])], v3_n)
-        # vertices[tuple(polygons[i+2][:3])] = [vertices[tuple(polygons[i+2][:3])][k] + v3_n[k] for k in range(3)]
-        # vertices[tuple(polygons[i+2][:3])].add(tuple(v3_n))
-        # v2[tuple(polygons[i+2][:3])].append(v3_n)
-
 
         i += 3
 
-    # for k, v in vertices.items():
-    #     print(k, v)
-
-    # for k in vertices.keys():
-    #     normalize(vertices[k])
-
-    # print('============')
     for k, v in vertices.items():
         v = list(v)
         x_total = 0
@@ -75,14 +56,7 @@ def calculate_vertex_normals(polygons):
         a = [x_total, y_total, z_total]
         normalize(a)
         vertices[k] = a
-    
-    # for k, v in vertices.items():
-    #     print(k, v)
 
-    # print('==')
-    # for k, v in v2.items():
-    #     print(k)
-    
     return vertices
 
 
@@ -123,10 +97,6 @@ def interpolate_normals(polygons, i, vertices, screen, zbuffer, view, ambient, l
     v_mid = vertices[points[MID]]
     v_top = vertices[points[TOP]]
 
-
-    # print(v_bot, v_mid, v_top)
-    # print('vbot:', v_bot, 'v_mid:', v_mid, 'v_top:', v_top)
-
     # top vertex -> bottom 
     dvx0 = (v_top[0] - v_bot[0]) / distance0 if distance0 != 0 else 0
     dvy0 = (v_top[1] - v_bot[1]) / distance0 if distance0 != 0 else 0
@@ -155,7 +125,6 @@ def interpolate_normals(polygons, i, vertices, screen, zbuffer, view, ambient, l
             dvy1 = (v_top[1] - v_mid[1]) / distance2 if distance2 != 0 else 0
             dvz1 = (v_top[2] - v_mid[2]) / distance2 if distance2 != 0 else 0 
 
-        # draw_scanline(int(x0), z0, int(x1), z1, y, screen, zbuffer, color)
         horizontal_interpolation(v0, v1, int(x0), int(x1), z0, z1, y, screen, zbuffer, view, ambient, light, symbols, reflect)
         x0+= dx0
         z0+= dz0
@@ -171,8 +140,6 @@ def interpolate_normals(polygons, i, vertices, screen, zbuffer, view, ambient, l
         v1[2] += dvz1
 
         y += 1
-
-
 
 
 def horizontal_interpolation(v0, v1, x0, x1, z0, z1, y, screen, zbuffer, view, ambient, light, symbols, reflect):
@@ -192,14 +159,7 @@ def horizontal_interpolation(v0, v1, x0, x1, z0, z1, y, screen, zbuffer, view, a
     new_v = v0[:]
     x = x0
     z = z0
-    # print(new_v)
-    # color = [int(magnitude(new_v) * 255), int(magnitude(new_v) * 255), int(magnitude(new_v) * 255)]
-    # print(color)
-    # color = get_lighting(new_v, view, ambient, light, symbols, reflect )
-    # plot(screen, zbuffer, color, x, y, z)
     while x <= x1:
-        # if i % 5 == 0:
-        #     draw_line(int(x), int(y), int(z), int(x + new_v[0]), int(y + new_v[1]), int(z + new_v[2]), screen, zbuffer, [255, 255, 255])
 
         color = get_lighting(new_v, view, ambient, light, symbols, reflect )
         plot(screen, zbuffer, color, x, y, z)
