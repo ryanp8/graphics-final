@@ -388,35 +388,83 @@ def draw_aa_line(x0, y0, z0, x1, y1, z1, screen, zbuffer, color):
     y_endpoint = y0 + gradient * (xend - x0)
     xgap = rfpart(x0 + 0.5)
     xpixel1 = xend
-    ypixel1 = ipart(yend)
+    ypixel1 = ipart(y_endpoint)
     if is_steep:
-        brightness = rfpart(yend) * xgap
+        brightness = rfpart(y_endpoint) * xgap
         modified_color = color[:]
         modified_color[0] = modified_color[0] * brightness
         modified_color[1] = modified_color[1] * brightness
         modified_color[2] = modified_color[2] * brightness
         # plot( screen, zbuffer, color, x, y, z )
         plot(screen, zbuffer, modified_color, ypixel1, xpixel1, 0)
-        brightness = fpart(yend) * xgap
+        brightness = fpart(y_endpoint) * xgap
         modified_color = color[:]
         modified_color[0] = modified_color[0] * brightness
         modified_color[1] = modified_color[1] * brightness
         modified_color[2] = modified_color[2] * brightness
         plot(screen, zbuffer, modified_color, ypixel1+1, xpixel1, 0)
     else:
-        brightness = rfpart(yend) * xgap
+        brightness = rfpart(y_endpoint) * xgap
         modified_color = color[:]
         modified_color[0] = modified_color[0] * brightness
         modified_color[1] = modified_color[1] * brightness
         modified_color[2] = modified_color[2] * brightness
         plot(screen, zbuffer, modified_color, xpixel1, ypixel1, 0)
-        brightness = fpart(yend) * xgap
+        brightness = fpart(y_endpoint) * xgap
         modified_color = color[:]
         modified_color[0] = modified_color[0] * brightness
         modified_color[1] = modified_color[1] * brightness
         modified_color[2] = modified_color[2] * brightness
         plot(screen, zbuffer, modified_color, xpixel1, ypixel1+1, 0)
-    intersection_y = yend + gradient # first y-intersection
+    intersection_y = y_endpoint + gradient # first y-intersection
+    x_endpoint = round_normal(x1)
+    y_endpoint = y1 + gradient * (x_endpoint - x1)
+    xgap = fpart(x1 + 0.5)
+    xpixel2 = x_endpoint
+    ypixel2 = ipart(y_endpoint)
+    if is_steep:
+        brightness = rfpart(y_endpoint) * xgap
+        modified_color = color[:]
+        modified_color[0] = modified_color[0] * brightness
+        modified_color[1] = modified_color[1] * brightness
+        modified_color[2] = modified_color[2] * brightness
+        plot(screen, zbuffer, modified_color, ypixel2, xpixel2, 0)
+        brightness = fpart(y_endpoint) * xgap
+        modified_color = color[:]
+        modified_color[0] = modified_color[0] * brightness
+        modified_color[1] = modified_color[1] * brightness
+        modified_color[2] = modified_color[2] * brightness
+        plot(screen, zbuffer, modified_color, ypixel2+1, xpixel2, 0)
+    else:
+        brightness = rfpart(y_endpoint) * xgap
+        modified_color = color[:]
+        modified_color[0] = modified_color[0] * brightness
+        modified_color[1] = modified_color[1] * brightness
+        modified_color[2] = modified_color[2] * brightness
+        plot(screen, zbuffer, modified_color, xpixel2, ypixel2, 0)
+        brightness = fpart(y_endpoint) * xgap
+        modified_color = color[:]
+        modified_color[0] = modified_color[0] * brightness
+        modified_color[1] = modified_color[1] * brightness
+        modified_color[2] = modified_color[2] * brightness
+        plot(screen, zbuffer, modified_color, xpixel2, ypixel2+1, 0)
+    
+    # main loop
+    if is_steep:
+        for x in range(xpixel1+1, xpixel2-1):
+            brightness = rfpart(intersection_y)
+            modified_color = color[:]
+            modified_color[0] = modified_color[0] * brightness
+            modified_color[1] = modified_color[1] * brightness
+            modified_color[2] = modified_color[2] * brightness
+            plot(screen, zbuffer, modified_color, ipart(intersection_y), x, 0)
+            brightness = fpart(intersection_y)
+            modified_color = color[:]
+            modified_color[0] = modified_color[0] * brightness
+            modified_color[1] = modified_color[1] * brightness
+            modified_color[2] = modified_color[2] * brightness
+            plot(screen, zbuffer, modified_color, ipart(intersection_y)+1, x, 0)
+            intersection_y += gradient
 
 def draw_line( x0, y0, z0, x1, y1, z1, screen, zbuffer, color ):
 
