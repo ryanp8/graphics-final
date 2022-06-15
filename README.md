@@ -19,6 +19,7 @@ Examples:
     - generates image (test.png) comparing the line algorithms, flat shading, and phong shading
 - ```make cube```
     - generates gif (cube_spin.gif) of spinning cube using phong shading
+
 Relevant MDL commands: aa_line and shading
 - aa_line
     - Takes in arguments: x0, y0, z0, x1, y1, z1 but NOTE: does not take into z-values into account; the default z value used is always 0
