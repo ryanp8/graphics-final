@@ -215,7 +215,7 @@ def run(filename):
             elif c == 'display' and num_frames < 2:
                 display(screen)
             elif c == 'save':
-                save_extension(screen, args[0])
+                save_extension(screen, args[0] + '.png')
             # end operation loop
         if num_frames > 1:
             print('saving ' + name + f"_%03d.png"%current_frame)
