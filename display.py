@@ -34,7 +34,6 @@ def plot( screen, zbuffer, color, x, y, z ):
     newy = YRES - 1 - y
     z = int((z * 1000)) / 1000.0
     if ( x >= 0 and x < XRES and newy >= 0 and newy < YRES and zbuffer[newy][x] <= z):
-        print('plotting')
         screen[newy][x] = color[:]
         zbuffer[newy][x] = z
 
