@@ -7,7 +7,7 @@ parser.out
 *.ppm
 *.png
 *.jpg
-*.gif
+# *.gif
 
 # python stuff
 *.pyc
