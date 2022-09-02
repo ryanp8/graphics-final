@@ -7,7 +7,7 @@
 - Phong shading
 
 ## Phong shading output example:
-![Phong example] (https://raw.githubusercontent.com/ryanp8/graphics-final/main/cube_spin.gif)
+![Phong example](https://raw.githubusercontent.com/ryanp8/graphics-final/main/cube_spin.gif)
 
 ---
 ## The Details
